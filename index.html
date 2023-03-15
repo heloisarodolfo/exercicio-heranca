@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    class Produto {
+    constructor(nome, preco) {
+      this.nome = nome;
+      this.preco = preco;
+    }
+  
+    calcularPrecoFinal() {
+      return this.preco;
+    }
+  
+    imprimirDados() {
+      console.log(`Produto: ${this.nome} - Preço: R$ ${this.preco.toFixed(2)}`);
+    }
+  }
+  
+
+  class ProdutoImportado extends Produto {
+    constructor(nome, preco, taxa) {
+      super(nome, preco);
+      this.taxa = taxa;
+    }
+  
+    calcularPrecoFinal() {
+      return this.preco + this.taxa;
+    }
+  
+    imprimirDados() {
+      console.log(`Produto Importado: ${this.nome} - Preço: R$ ${this.calcularPrecoFinal().toFixed(2)}`);
+    }
+  }
+  
+  class ProdutoUsado extends Produto {
+    constructor(nome, preco, dataFabricacao) {
+      super(nome, preco);
+      this.dataFabricacao = dataFabricacao;
+    }
+  
+    calcularPrecoFinal() {
+      const desconto = (new Date().getFullYear() - this.dataFabricacao.getFullYear()) * 0.1;
+      return this.preco - (this.preco * desconto);
+    }
+  
+    imprimirDados() {
+      console.log(`Produto Usado: ${this.nome} - Preço: R$ ${this.calcularPrecoFinal().toFixed(2)}`);
+    }
+  }
+  
+  const n = parseInt(prompt('Digite o número de produtos a serem cadastrados: '));
+  
+  const produtos = [];
+  
+  for (let i = 1; i <= n; i++) {
+    console.log(`Digite os dados do Produto ${i}:`);
+    const nome = prompt('Nome: ');
+    const preco = parseFloat(prompt('Preço: R$ '));
+    const tipo = prompt('Tipo (I para Importado, U para Usado): ').toUpperCase();
+    if (tipo === 'I') {
+      const taxa = parseFloat(prompt('Taxa de Alfândega: R$ '));
+      produtos.push(new ProdutoImportado(nome, preco, taxa));
+    } else if (tipo === 'U') {
+      const dataFabricacao = new Date(prompt('Data de Fabricação (DD/MM/AAAA): '));
+      produtos.push(new ProdutoUsado(nome, preco, dataFabricacao));
+    } else {
+      produtos.push(new Produto(nome, preco));
+    }
+  }
+  
+  console.log('\nPreços dos Produtos:');
+  produtos.forEach((produto) => {
+    produto.imprimirDados();
+  });
+
+
+    </script>
+</body>
+</html>
